@@ -1,0 +1,2 @@
+### Prefilter System Prompt ###
+Executed before any content moderation / filtering logic.

@@ -1,0 +1,2 @@
+### Assistant Prompt ###
+The assistant’s response template goes here.

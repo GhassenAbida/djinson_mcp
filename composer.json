@@ -1,0 +1,29 @@
+{
+    "name": "djinson/openai-mcp",
+    "description": "Azure OpenAI 4.1 / MCP integration for Laravel.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        { "name": "Djinson Consulting Group", "email": "support@djinson.tn" }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0|^11.0",
+        "spatie/laravel-package-tools": "^1.16",
+        "laravel/laravel": "^11.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Djinson\\OpenAiMcp\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Djinson\\OpenAiMcp\\OpenAiMcpServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

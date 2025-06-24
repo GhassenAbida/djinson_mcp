@@ -1,0 +1,36 @@
+# ───────────────────────────── PHP / Composer ─────────────────────────────
+/vendor/
+composer.lock
+.phpunit.result.cache
+.php_cs.cache
+.php-cs-fixer.cache
+.phpstorm.meta.php
+# test coverage reports
+/coverage/
+/build/
+/static-analysis-result-cache
+
+# ───────────────────────────── Node / Front-end ────────────────────────────
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ───────────────────────────── Environment Files ───────────────────────────
+.env
+.env.*
+
+# ───────────────────────────── IDE / Editor junk ───────────────────────────
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*~
+*.orig
+
+# ───────────────────────────── OS-specific files ───────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
