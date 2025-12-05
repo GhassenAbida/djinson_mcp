@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AI\Exceptions;
+namespace Djinson\OpenAiMcp\app\AI\Exceptions;
 
 use Exception;
 

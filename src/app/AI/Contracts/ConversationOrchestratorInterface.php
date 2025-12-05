@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AI\Contracts;
+namespace Djinson\OpenAiMcp\app\AI\Contracts;
 
 /**
  * Manages a multi-turn conversation with function invocation.

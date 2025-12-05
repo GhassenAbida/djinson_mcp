@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MCP\Contracts;
+namespace Djinson\OpenAiMcp\app\MCP\Contracts;
 
 use OPGG\LaravelMcpServer\Enums\ProcessMessageType;
 

@@ -1,7 +1,7 @@
 <?php
-namespace App\AI\Contracts;
+namespace Djinson\OpenAiMcp\app\AI\Contracts;
 
-use App\AI\Models\FilterResult;
+use Djinson\OpenAiMcp\app\AI\Models\FilterResult;
 
 interface QueryFilterInterface
 {

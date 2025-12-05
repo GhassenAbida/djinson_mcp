@@ -4,7 +4,10 @@
     "type": "library",
     "license": "MIT",
     "authors": [
-        { "name": "Djinson Consulting Group", "email": "support@djinson.tn" }
+        {
+            "name": "Djinson Consulting Group",
+            "email": "support@djinson.tn"
+        }
     ],
     "require": {
         "php": "^8.2",
@@ -22,6 +25,11 @@
             "Djinson\\OpenAiMcp\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Djinson\\OpenAiMcp\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -30,5 +38,10 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }

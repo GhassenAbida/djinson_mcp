@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AI\Contracts;
+namespace Djinson\OpenAiMcp\app\AI\Contracts;
 
 /**
  * Defines a generic LLM client interface.

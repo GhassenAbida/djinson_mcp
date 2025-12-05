@@ -1,5 +1,5 @@
 <?php
-namespace App\AI\Models;
+namespace Djinson\OpenAiMcp\app\AI\Models;
 
 class FilterResult
 {

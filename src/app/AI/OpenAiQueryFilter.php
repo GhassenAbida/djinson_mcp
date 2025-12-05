@@ -1,9 +1,9 @@
 <?php
-namespace App\AI\Services;
+namespace Djinson\OpenAiMcp\app\AI;
 
-use App\AI\Contracts\QueryFilterInterface;
-use App\AI\Models\FilterResult;
-use App\AI\Contracts\LlmClientInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\QueryFilterInterface;
+use Djinson\OpenAiMcp\app\AI\Models\FilterResult;
+use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
 use Illuminate\Support\Facades\File;
 
 class OpenAiQueryFilter implements QueryFilterInterface

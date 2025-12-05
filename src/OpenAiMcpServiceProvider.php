@@ -5,14 +5,14 @@ namespace Djinson\OpenAiMcp;
 use Illuminate\Support\Facades\File;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use App\AI\Contracts\ConversationOrchestratorInterface;
-use App\AI\Contracts\LlmClientInterface;
-use App\AI\Contracts\QueryFilterInterface;
-use App\AI\ConversationOrchestrator;
-use App\AI\AzureLlmClient;
-use App\AI\OpenAiQueryFilter;
-use App\MCP\Contracts\ToolInterface;
-use App\MCP\ToolManagerInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\ConversationOrchestratorInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\QueryFilterInterface;
+use Djinson\OpenAiMcp\app\AI\Services\ConversationOrchestrator;
+use Djinson\OpenAiMcp\app\AI\Services\AzureLlmClient;
+use Djinson\OpenAiMcp\app\AI\Services\OpenAiQueryFilter;
+use Djinson\OpenAiMcp\app\MCP\Contracts\ToolInterface;
+use Djinson\OpenAiMcp\app\MCP\ToolManagerInterface;
 
 class OpenAiMcpServiceProvider extends PackageServiceProvider
 {
@@ -20,10 +20,7 @@ class OpenAiMcpServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('openai-mcp')
-            ->hasConfigFile('openai-mcp')
-            ->hasPublishableAssets([
-                __DIR__.'/../resources/ai-prompts' => resource_path('ai-prompts'),
-            ], 'openai-mcp-prompts');
+            ->hasConfigFile('openai-mcp');
     }
 
     public function registeringPackage(): void
@@ -35,6 +32,10 @@ class OpenAiMcpServiceProvider extends PackageServiceProvider
 
     public function bootingPackage(): void
     {
+        $this->publishes([
+            __DIR__.'/../resources/ai-prompts' => resource_path('ai-prompts'),
+        ], 'openai-mcp-prompts');
+
         $this->discoverAndTagTools();
     }
 

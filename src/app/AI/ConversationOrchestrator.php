@@ -1,9 +1,9 @@
 <?php
 
-namespace App\AI\Services;
+namespace Djinson\OpenAiMcp\app\AI;
 
-use App\AI\Contracts\LlmClientInterface;
-use App\AI\Contracts\ConversationOrchestratorInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\ConversationOrchestratorInterface;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Log;
 class ConversationOrchestrator implements ConversationOrchestratorInterface
 {
     protected LlmClientInterface $client;
-    protected \App\MCP\Contracts\ToolManagerInterface $tools;
+    protected \Djinson\OpenAiMcp\app\MCP\Contracts\ToolManagerInterface $tools;
 
-    public function __construct(LlmClientInterface $client, \App\MCP\Contracts\ToolManagerInterface $tools)
+    public function __construct(LlmClientInterface $client, \Djinson\OpenAiMcp\app\MCP\Contracts\ToolManagerInterface $tools)
     {
         $this->client = $client;
         $this->tools  = $tools;

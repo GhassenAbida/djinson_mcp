@@ -1,8 +1,8 @@
 <?php
 
-namespace App\AI\Services;
+namespace Djinson\OpenAiMcp\app\AI;
 
-use App\AI\Contracts\LlmClientInterface;
+use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -57,7 +57,7 @@ class AzureLlmClient implements LlmClientInterface
             }, $sleep);
         } catch (\Exception $e) {
             Log::error('LLM call failed', ['exception' => $e, 'body' => $body]);
-            throw \App\AI\Exceptions\LlmException::fromException($e);
+            throw \Djinson\OpenAiMcp\app\AI\Exceptions\LlmException::fromException($e);
         }
     }
 

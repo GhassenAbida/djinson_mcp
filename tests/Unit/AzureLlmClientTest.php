@@ -3,10 +3,10 @@
 namespace Djinson\OpenAiMcp\Tests\Unit;
 
 use Djinson\OpenAiMcp\Tests\TestCase;
-use App\AI\Services\AzureLlmClient;
+use Djinson\OpenAiMcp\app\AI\AzureLlmClient;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
-use App\AI\Exceptions\LlmException;
+use Djinson\OpenAiMcp\app\AI\Exceptions\LlmException;
 
 class AzureLlmClientTest extends TestCase
 {

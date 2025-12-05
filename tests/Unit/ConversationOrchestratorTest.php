@@ -3,10 +3,10 @@
 namespace Djinson\OpenAiMcp\Tests\Unit;
 
 use Djinson\OpenAiMcp\Tests\TestCase;
-use App\AI\Services\ConversationOrchestrator;
-use App\AI\Contracts\LlmClientInterface;
-use App\MCP\Contracts\ToolManagerInterface;
-use App\MCP\Contracts\ToolInterface;
+use Djinson\OpenAiMcp\app\AI\ConversationOrchestrator;
+use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
+use Djinson\OpenAiMcp\app\MCP\Contracts\ToolManagerInterface;
+use Djinson\OpenAiMcp\app\MCP\Contracts\ToolInterface;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Mockery;

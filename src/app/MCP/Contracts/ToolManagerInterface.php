@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MCP\Contracts;
+namespace Djinson\OpenAiMcp\app\MCP\Contracts;
 
 /**
  * Manages registration and retrieval of MCP tools.
