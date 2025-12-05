@@ -11,42 +11,54 @@ use Illuminate\Support\Facades\Log;
  */
 class AzureLlmClient implements LlmClientInterface
 {
-   public function call(array $messages, array $functions = [], string $functionCall = 'auto'): array
-{
-    $cfg = config('services.azure_openai');
-    $url = config('services.azure_openai.deployment_url');
+    public function call(array $messages, array $functions = [], string $functionCall = 'auto'): array
+    {
+        $cfg = config('openai-mcp');
+        $modelOptions = config('openai-mcp.model_options');
+        $retries = config('openai-mcp.retries.client', 3);
+        $sleep = config('openai-mcp.retries.sleep_ms', 100);
+        $timeout = config('openai-mcp.timeouts.request', 30);
 
-    // Always include the core messages
-    $payload = [
-        'messages' => $messages,
-    ];
+        $url = $cfg['azure_endpoint'] . '/openai/deployments/' . $modelOptions['deployment'] . '/chat/completions?api-version=' . $cfg['api_version'];
 
-    // Only attach function schema if we actually have at least one
-    if (count($functions) > 0) {
-        // Ensure $functions is a zero-based, numerically indexed array
-        $payload['functions']     = array_values($functions);
-        $payload['function_call'] = $functionCall;
+        // Always include the core messages
+        $payload = [
+            'messages' => $messages,
+        ];
+
+        // Only attach function schema if we actually have at least one
+        if (count($functions) > 0) {
+            // Ensure $functions is a zero-based, numerically indexed array
+            $payload['functions']     = array_values($functions);
+            $payload['function_call'] = $functionCall;
+        }
+
+        // Merge in model parameters
+        $body = array_merge([
+            'temperature' => $modelOptions['temperature'],
+            'top_p'       => $modelOptions['top_p'],
+            'max_tokens'  => $modelOptions['max_tokens'],
+            'stream'      => false,
+        ], $payload);
+
+        Log::debug('LLM Request', ['url' => $url, 'body' => $body]);
+
+        try {
+            return retry($retries, function () use ($url, $cfg, $body, $timeout) {
+                $response = Http::withHeaders([
+                    'api-key'      => $cfg['azure_key'],
+                    'Content-Type' => 'application/json',
+                ])
+                ->timeout($timeout)
+                ->post($url, $body)
+                ->throw();
+
+                return $response->json();
+            }, $sleep);
+        } catch (\Exception $e) {
+            Log::error('LLM call failed', ['exception' => $e, 'body' => $body]);
+            throw \App\AI\Exceptions\LlmException::fromException($e);
+        }
     }
-
-    // Merge in model parameters
-    $body = array_merge([
-        'temperature' => 0.4,
-        'model'       => $cfg['deployment'],
-        'stream'      => false,
-    ], $payload);
-
-    try {
-        return retry(3, fn() => Http::withHeaders([
-            'api-key'      => $cfg['key'],
-            'Content-Type' => 'application/json',
-        ])
-        ->post($url, $body)
-        ->throw()
-        ->json(), 100);
-    } catch (\Exception $e) {
-        Log::error('LLM call failed', ['exception' => $e]);
-        throw $e;
-    }
-}
 
 }

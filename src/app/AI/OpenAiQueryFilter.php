@@ -12,8 +12,10 @@ class OpenAiQueryFilter implements QueryFilterInterface
 
     public function filter(string $input, ?string $priorContext = null): FilterResult
     {
+        $promptPath = config('openai-mcp.paths.prompts', resource_path('ai-prompts'));
+
         // 1) load system prompt
-        $system = File::get(resource_path('ai-prompts/prefilter_system.txt'));
+        $system = File::get($promptPath . '/prefilter_system.txt');
 
         // 2) define function schema
         $functions = [[
