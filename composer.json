@@ -1,6 +1,6 @@
 {
     "name": "djinson/laravel-mcp",
-    "description": "Azure OpenAI 4.1 / MCP integration for Laravel.",
+    "description": "Laravel integration for Model-Centric Processing (MCP) with support for Azure OpenAI, OpenAI, and Google Gemini.",
     "type": "library",
     "license": "MIT",
     "authors": [
