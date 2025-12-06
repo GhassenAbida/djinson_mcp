@@ -1,5 +1,5 @@
 {
-    "name": "djinson/openai-mcp",
+    "name": "djinson/laravel-mcp",
     "description": "Azure OpenAI 4.1 / MCP integration for Laravel.",
     "type": "library",
     "license": "MIT",

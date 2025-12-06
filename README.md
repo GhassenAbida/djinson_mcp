@@ -1,8 +1,13 @@
-# djinson/openai-mcp
+# djinson/laravel-mcp
 
-Laravel integration that wires your Azure OpenAI 4.1 deployment into a Model-Centric Processing (MCP) architecture.
+Laravel integration that wires your Azure OpenAI 4.1, OpenAI, or Google Gemini deployment into a Model-Centric Processing (MCP) architecture.
+
+## Requirements
+*   PHP: ^8.2
+*   Laravel: ^10.0 or ^11.0
 
 ## Features
+*   **Multi-Provider Support**: Supports Azure OpenAI, standard OpenAI, and Google Gemini.
 *   **Centralized Configuration**: Publishes `config/openai-mcp.php` for managing credentials, endpoints, model options, retries, and timeouts.
 *   **Robust Error Handling**: Custom `LlmException` for specific error handling and structured logging for better observability.
 *   **Conversation Orchestration**: Manages multi-turn conversations, tool execution, and cycle detection.
@@ -13,7 +18,7 @@ Laravel integration that wires your Azure OpenAI 4.1 deployment into a Model-Cen
 ## Installation
 
 ```bash
-composer require djinson/openai-mcp
+composer require djinson/laravel-mcp
 ```
 
 ### Publish Configuration
