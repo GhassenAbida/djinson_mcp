@@ -13,14 +13,21 @@ use Djinson\OpenAiMcp\app\AI\LlmClientManager;
 use Djinson\OpenAiMcp\app\AI\Services\OpenAiQueryFilter;
 use Djinson\OpenAiMcp\app\MCP\Contracts\ToolInterface;
 use Djinson\OpenAiMcp\app\MCP\ToolManagerInterface;
+use Djinson\OpenAiMcp\Commands\InstallCommand;
 
-class OpenAiMcpServiceProvider extends PackageServiceProvider
+class LaravelMcpServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
+        /*
+         * This class is a Package Service Provider
+         *
+         * More info: https://github.com/spatie/laravel-package-tools
+         */
         $package
-            ->name('openai-mcp')
-            ->hasConfigFile('openai-mcp');
+            ->name('laravel-mcp')
+            ->hasConfigFile('openai-mcp')
+            ->hasCommand(InstallCommand::class);
     }
 
     public function registeringPackage(): void

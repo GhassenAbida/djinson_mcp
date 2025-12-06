@@ -24,13 +24,13 @@ composer require djinson/laravel-mcp
 ### Publish Configuration
 Publish the configuration file to `config/openai-mcp.php`:
 ```bash
-php artisan vendor:publish --provider="Djinson\OpenAiMcp\OpenAiMcpServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Djinson\OpenAiMcp\LaravelMcpServiceProvider" --tag="config"
 ```
 
 ### Publish Prompts
 Publish the default AI prompts to `resources/ai-prompts/`:
 ```bash
-php artisan vendor:publish --provider="Djinson\OpenAiMcp\OpenAiMcpServiceProvider" --tag="openai-mcp-prompts"
+php artisan vendor:publish --provider="Djinson\OpenAiMcp\LaravelMcpServiceProvider" --tag="openai-mcp-prompts"
 ```
 
 ## Configuration

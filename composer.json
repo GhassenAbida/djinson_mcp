@@ -33,7 +33,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Djinson\\OpenAiMcp\\OpenAiMcpServiceProvider"
+                "Djinson\\OpenAiMcp\\LaravelMcpServiceProvider"
             ]
         }
     },

@@ -2,7 +2,7 @@
 
 namespace Djinson\OpenAiMcp\Tests;
 
-use Djinson\OpenAiMcp\OpenAiMcpServiceProvider;
+use Djinson\OpenAiMcp\LaravelMcpServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -10,7 +10,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            OpenAiMcpServiceProvider::class,
+            LaravelMcpServiceProvider::class,
         ];
     }
 
