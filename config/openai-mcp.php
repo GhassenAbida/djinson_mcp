@@ -4,24 +4,61 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Azure OpenAI 4.1 Credentials
+    | Default LLM Driver
     |--------------------------------------------------------------------------
+    |
+    | This option controls the default LLM driver that will be used to make
+    | requests. You may set this to any of the connections defined in the
+    | "drivers" array below.
+    |
+    | Supported: "azure", "openai", "gemini"
+    |
     */
 
-    'azure_key'      => env('AZURE_OPENAI_KEY', ''),
-    'azure_endpoint' => env('AZURE_OPENAI_ENDPOINT', ''),
-    'api_version'    => env('AZURE_OPENAI_API_VERSION', '2024-02-15-preview'),
+    'default' => env('LLM_DRIVER', 'azure'),
 
     /*
     |--------------------------------------------------------------------------
-    | Model Options
+    | LLM Drivers
     |--------------------------------------------------------------------------
+    |
+    | Here you may configure the settings for each driver.
+    |
     */
-    'model_options' => [
-        'deployment'  => env('AZURE_OPENAI_DEPLOYMENT', 'gpt-4'),
-        'temperature' => (float) env('AZURE_OPENAI_TEMPERATURE', 0.4),
-        'top_p'       => (float) env('AZURE_OPENAI_TOP_P', 0.95),
-        'max_tokens'  => (int) env('AZURE_OPENAI_MAX_TOKENS', 800),
+
+    'drivers' => [
+        'azure' => [
+            'key'           => env('AZURE_OPENAI_KEY', ''),
+            'endpoint'      => env('AZURE_OPENAI_ENDPOINT', ''),
+            'api_version'   => env('AZURE_OPENAI_API_VERSION', '2024-02-15-preview'),
+            'deployment'    => env('AZURE_OPENAI_DEPLOYMENT', 'gpt-4'),
+            'model_options' => [
+                'temperature' => (float) env('AZURE_OPENAI_TEMPERATURE', 0.4),
+                'top_p'       => (float) env('AZURE_OPENAI_TOP_P', 0.95),
+                'max_tokens'  => (int) env('AZURE_OPENAI_MAX_TOKENS', 800),
+            ],
+        ],
+
+        'openai' => [
+            'key'           => env('OPENAI_API_KEY', ''),
+            'model'         => env('OPENAI_MODEL', 'gpt-4'),
+            'organization'  => env('OPENAI_ORGANIZATION', null),
+            'model_options' => [
+                'temperature' => (float) env('OPENAI_TEMPERATURE', 0.7),
+                'top_p'       => (float) env('OPENAI_TOP_P', 1.0),
+                'max_tokens'  => (int) env('OPENAI_MAX_TOKENS', 800),
+            ],
+        ],
+
+        'gemini' => [
+            'key'           => env('GEMINI_API_KEY', ''),
+            'model'         => env('GEMINI_MODEL', 'gemini-pro'),
+            'model_options' => [
+                'temperature' => (float) env('GEMINI_TEMPERATURE', 0.7),
+                'top_p'       => (float) env('GEMINI_TOP_P', 0.95),
+                'max_tokens'  => (int) env('GEMINI_MAX_TOKENS', 800),
+            ],
+        ],
     ],
 
     /*

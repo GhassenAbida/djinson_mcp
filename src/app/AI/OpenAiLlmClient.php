@@ -6,34 +6,28 @@ use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Azure OpenAI implementation of LlmClientInterface.
- */
-class AzureLlmClient implements LlmClientInterface
+class OpenAiLlmClient implements LlmClientInterface
 {
     public function call(array $messages, array $functions = [], string $functionCall = 'auto'): array
     {
-        $cfg = config('openai-mcp.drivers.azure');
+        $cfg = config('openai-mcp.drivers.openai');
         $modelOptions = $cfg['model_options'];
         $retries = config('openai-mcp.retries.client', 3);
         $sleep = config('openai-mcp.retries.sleep_ms', 100);
         $timeout = config('openai-mcp.timeouts.request', 30);
 
-        $url = $cfg['endpoint'] . '/openai/deployments/' . $cfg['deployment'] . '/chat/completions?api-version=' . $cfg['api_version'];
+        $url = 'https://api.openai.com/v1/chat/completions';
 
-        // Always include the core messages
         $payload = [
+            'model'    => $cfg['model'],
             'messages' => $messages,
         ];
 
-        // Only attach function schema if we actually have at least one
         if (count($functions) > 0) {
-            // Ensure $functions is a zero-based, numerically indexed array
             $payload['functions']     = array_values($functions);
             $payload['function_call'] = $functionCall;
         }
 
-        // Merge in model parameters
         $body = array_merge([
             'temperature' => $modelOptions['temperature'],
             'top_p'       => $modelOptions['top_p'],
@@ -41,13 +35,13 @@ class AzureLlmClient implements LlmClientInterface
             'stream'      => false,
         ], $payload);
 
-        Log::debug('LLM Request', ['url' => $url, 'body' => $body]);
+        Log::debug('OpenAI Request', ['url' => $url, 'body' => $body]);
 
         try {
             return retry($retries, function () use ($url, $cfg, $body, $timeout) {
                 $response = Http::withHeaders([
-                    'api-key'      => $cfg['key'],
-                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $cfg['key'],
+                    'Content-Type'  => 'application/json',
                 ])
                 ->timeout($timeout)
                 ->post($url, $body)
@@ -56,9 +50,8 @@ class AzureLlmClient implements LlmClientInterface
                 return $response->json();
             }, $sleep);
         } catch (\Exception $e) {
-            Log::error('LLM call failed', ['exception' => $e, 'body' => $body]);
+            Log::error('OpenAI call failed', ['exception' => $e, 'body' => $body]);
             throw \Djinson\OpenAiMcp\app\AI\Exceptions\LlmException::fromException($e);
         }
     }
-
 }

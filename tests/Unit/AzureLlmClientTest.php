@@ -15,11 +15,11 @@ class AzureLlmClientTest extends TestCase
         parent::setUp();
         
         // Mock configuration
-        Config::set('openai-mcp.azure_endpoint', 'https://example.com');
-        Config::set('openai-mcp.azure_key', 'test-key');
-        Config::set('openai-mcp.api_version', '2024-02-15-preview');
-        Config::set('openai-mcp.model_options', [
-            'deployment'  => 'gpt-4',
+        Config::set('openai-mcp.drivers.azure.endpoint', 'https://example.com');
+        Config::set('openai-mcp.drivers.azure.key', 'test-key');
+        Config::set('openai-mcp.drivers.azure.api_version', '2024-02-15-preview');
+        Config::set('openai-mcp.drivers.azure.deployment', 'gpt-4');
+        Config::set('openai-mcp.drivers.azure.model_options', [
             'temperature' => 0.4,
             'top_p'       => 0.95,
             'max_tokens'  => 800,

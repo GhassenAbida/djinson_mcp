@@ -9,7 +9,7 @@ use Djinson\OpenAiMcp\app\AI\Contracts\ConversationOrchestratorInterface;
 use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
 use Djinson\OpenAiMcp\app\AI\Contracts\QueryFilterInterface;
 use Djinson\OpenAiMcp\app\AI\Services\ConversationOrchestrator;
-use Djinson\OpenAiMcp\app\AI\Services\AzureLlmClient;
+use Djinson\OpenAiMcp\app\AI\LlmClientManager;
 use Djinson\OpenAiMcp\app\AI\Services\OpenAiQueryFilter;
 use Djinson\OpenAiMcp\app\MCP\Contracts\ToolInterface;
 use Djinson\OpenAiMcp\app\MCP\ToolManagerInterface;
@@ -26,7 +26,12 @@ class OpenAiMcpServiceProvider extends PackageServiceProvider
     public function registeringPackage(): void
     {
         $this->app->singleton(ConversationOrchestratorInterface::class, ConversationOrchestrator::class);
-        $this->app->singleton(LlmClientInterface::class, AzureLlmClient::class);
+        $this->app->singleton(LlmClientManager::class, function ($app) {
+            return new LlmClientManager($app);
+        });
+        $this->app->bind(LlmClientInterface::class, function ($app) {
+            return $app->make(LlmClientManager::class)->driver();
+        });
         $this->app->singleton(QueryFilterInterface::class, OpenAiQueryFilter::class);
     }
 
