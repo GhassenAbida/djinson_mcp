@@ -8,11 +8,12 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Djinson\OpenAiMcp\app\AI\Contracts\ConversationOrchestratorInterface;
 use Djinson\OpenAiMcp\app\AI\Contracts\LlmClientInterface;
 use Djinson\OpenAiMcp\app\AI\Contracts\QueryFilterInterface;
-use Djinson\OpenAiMcp\app\AI\Services\ConversationOrchestrator;
+use Djinson\OpenAiMcp\app\AI\ConversationOrchestrator;
 use Djinson\OpenAiMcp\app\AI\LlmClientManager;
-use Djinson\OpenAiMcp\app\AI\Services\OpenAiQueryFilter;
+use Djinson\OpenAiMcp\app\AI\OpenAiQueryFilter;
 use Djinson\OpenAiMcp\app\MCP\Contracts\ToolInterface;
-use Djinson\OpenAiMcp\app\MCP\ToolManagerInterface;
+use Djinson\OpenAiMcp\app\MCP\Contracts\ToolManagerInterface;
+use Djinson\OpenAiMcp\app\MCP\ToolManager;
 use Djinson\OpenAiMcp\Commands\InstallCommand;
 
 class LaravelMcpServiceProvider extends PackageServiceProvider
@@ -32,6 +33,7 @@ class LaravelMcpServiceProvider extends PackageServiceProvider
 
     public function registeringPackage(): void
     {
+        // dd('Provider Loaded');
         $this->app->singleton(ConversationOrchestratorInterface::class, ConversationOrchestrator::class);
         $this->app->singleton(LlmClientManager::class, function ($app) {
             return new LlmClientManager($app);
@@ -40,12 +42,13 @@ class LaravelMcpServiceProvider extends PackageServiceProvider
             return $app->make(LlmClientManager::class)->driver();
         });
         $this->app->singleton(QueryFilterInterface::class, OpenAiQueryFilter::class);
+        $this->app->singleton(ToolManagerInterface::class, ToolManager::class);
     }
 
     public function bootingPackage(): void
     {
         $this->publishes([
-            __DIR__.'/../resources/ai-prompts' => resource_path('ai-prompts'),
+            __DIR__.'/resources/ai-prompts' => resource_path('ai-prompts'),
         ], 'openai-mcp-prompts');
 
         $this->discoverAndTagTools();
