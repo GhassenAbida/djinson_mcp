@@ -13,7 +13,9 @@
         "tool-use",
         "chatgpt",
         "artificial-intelligence",
-        "sdk"
+        "sdk",
+        "context-protocol",
+        "claude"
     ],
     "type": "library",
     "license": "MIT",
