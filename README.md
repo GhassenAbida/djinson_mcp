@@ -1,6 +1,12 @@
-# djinson/laravel-mcp
+# 🚀 Laravel MCP (Model-Centric Processing)
 
-Laravel integration that wires your Azure OpenAI 4.1, OpenAI, or Google Gemini deployment into a Model-Centric Processing (MCP) architecture.
+**Build powerful AI Agents in Laravel with ease.**
+
+This package provides a robust integration for **Model-Centric Processing (MCP)** in Laravel, allowing you to seamlessly wire **Azure OpenAI**, **OpenAI**, and **Google Gemini** into your applications. It handles conversation orchestration, tool execution, cycle detection, and error handling, so you can focus on building intelligent features.
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/djinson/laravel-mcp.svg?style=flat-square)](https://packagist.org/packages/djinson/laravel-mcp)
+[![Total Downloads](https://img.shields.io/packagist/dt/djinson/laravel-mcp.svg?style=flat-square)](https://packagist.org/packages/djinson/laravel-mcp)
+[![License](https://img.shields.io/packagist/l/djinson/laravel-mcp.svg?style=flat-square)](https://packagist.org/packages/djinson/laravel-mcp)
 
 ## Requirements
 *   PHP: ^8.2

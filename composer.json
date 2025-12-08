@@ -1,12 +1,27 @@
 {
     "name": "djinson/laravel-mcp",
-    "description": "Laravel integration for Model-Centric Processing (MCP) with support for Azure OpenAI, OpenAI, and Google Gemini.",
+    "description": "The ultimate Laravel integration for Model-Centric Processing (MCP). Seamlessly connect Azure OpenAI, OpenAI, and Google Gemini to build powerful AI agents with tool use, conversation orchestration, and robust error handling.",
+    "keywords": [
+        "laravel",
+        "ai",
+        "mcp",
+        "openai",
+        "azure",
+        "gemini",
+        "llm",
+        "agent",
+        "tool-use",
+        "chatgpt",
+        "artificial-intelligence",
+        "sdk"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Djinson Consulting Group",
-            "email": "support@djinson.tn"
+            "email": "support@djinson.tn",
+            "role": "Developer"
         }
     ],
     "require": {
