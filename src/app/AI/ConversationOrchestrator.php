@@ -26,6 +26,7 @@ class ConversationOrchestrator implements ConversationOrchestratorInterface
         $promptPath = config('openai-mcp.paths.prompts', resource_path('ai-prompts'));
         $retries = config('openai-mcp.retries.orchestrator', 2);
         $sleep = config('openai-mcp.retries.sleep_ms', 100);
+        $maxSteps = config('openai-mcp.retries.max_steps', 10);
 
         // Load highest-level prompts
         $messages = [
@@ -53,10 +54,25 @@ class ConversationOrchestrator implements ConversationOrchestratorInterface
         }
 
         $choice = $response['choices'][0]['message'];
-
         $seenCalls = [];
+        $steps = 0;
 
         while (isset($choice['function_call'])) {
+            if ($steps >= $maxSteps) {
+                Log::warning('Max conversation steps reached', ['steps' => $steps]);
+                // Break the loop and return what we have or a specific message
+                // For now, we'll try to get a final response from the LLM or just return the last content if any.
+                // But usually if it's function calling, content is null.
+                // Let's force a final call without functions to get a summary/apology.
+                $messages[] = [
+                    'role' => 'system',
+                    'content' => 'System: Maximum conversation steps reached. Please summarize the progress or explain why the task could not be completed.'
+                ];
+                $finalResp = $this->client->call($messages, [], 'none');
+                return $finalResp['choices'][0]['message']['content'] ?? 'Max steps reached.';
+            }
+
+            $steps++;
             $fc = $choice['function_call'];
 
             // Build a unique key for this call
@@ -65,45 +81,66 @@ class ConversationOrchestrator implements ConversationOrchestratorInterface
             // If we’ve ever run this exact call before, we have a cycle
             if (in_array($currentKey, $seenCalls, true)) {
                 Log::warning('Function call cycle detected', ['function' => $fc['name']]);
-                throw new \RuntimeException("Function call cycle detected: {$fc['name']}");
+                // Feed back error to LLM
+                $messages[] = $choice;
+                $messages[] = [
+                    'role'    => 'function',
+                    'name'    => $fc['name'],
+                    'content' => json_encode(['error' => "Cycle detected: You have already called this tool with these exact arguments. Please try a different approach."]),
+                ];
+            } else {
+                // Record this call
+                $seenCalls[] = $currentKey;
+
+                // Decode arguments
+                $args = json_decode($fc['arguments'] ?? '{}', true);
+                if (!is_array($args)) {
+                    // Feed back error
+                    $messages[] = $choice;
+                    $messages[] = [
+                        'role'    => 'function',
+                        'name'    => $fc['name'],
+                        'content' => json_encode(['error' => "Invalid JSON arguments provided."]),
+                    ];
+                } else {
+                    Log::info('Executing Tool', ['tool' => $fc['name'], 'args' => $args]);
+
+                    // Execute the tool
+                    try {
+                        $result = $this->tools
+                            ->get($fc['name'])
+                            ->execute($args);
+                        
+                        $messages[] = $choice;
+                        $messages[] = [
+                            'role'    => 'function',
+                            'name'    => $fc['name'],
+                            'content' => json_encode($result, JSON_UNESCAPED_UNICODE),
+                        ];
+                    } catch (\Exception $e) {
+                        Log::error('Tool execution failed', ['tool' => $fc['name'], 'exception' => $e]);
+                        // Feed error back to LLM
+                        $messages[] = $choice;
+                        $messages[] = [
+                            'role'    => 'function',
+                            'name'    => $fc['name'],
+                            'content' => json_encode(['error' => "Tool execution failed: " . $e->getMessage()]),
+                        ];
+                    }
+                }
             }
-
-            // Record this call
-            $seenCalls[] = $currentKey;
-
-            // Decode arguments
-            $args = json_decode($fc['arguments'] ?? '{}', true);
-            if (!is_array($args)) {
-                Log::error('Invalid tool arguments', ['function' => $fc['name'], 'arguments' => $fc['arguments']]);
-                throw new \RuntimeException("Invalid arguments for tool: {$fc['name']}");
-            }
-
-            Log::info('Executing Tool', ['tool' => $fc['name'], 'args' => $args]);
-
-            // Execute the tool
-            try {
-                $result = $this->tools
-                    ->get($fc['name'])
-                    ->execute($args);
-            } catch (\Exception $e) {
-                Log::error('Tool execution failed', ['tool' => $fc['name'], 'exception' => $e]);
-                throw $e;
-            }
-
-            // Append function call + result
-            $messages[] = $choice;
-            $messages[] = [
-                'role'    => 'function',
-                'name'    => $fc['name'],
-                'content' => json_encode($result, JSON_UNESCAPED_UNICODE),
-            ];
 
             // Ask the model again
-            $next   = $this->client->call($messages);
-            $choice = $next['choices'][0]['message'] ?? null;
+            try {
+                $next = $this->client->call($messages, $functions);
+                $choice = $next['choices'][0]['message'] ?? null;
+            } catch (\Exception $e) {
+                 Log::error('LLM call failed during loop', ['exception' => $e]);
+                 throw $e;
+            }
 
             if (! $choice) {
-                Log::error('LLM response missing during orchestration', ['response' => $next]);
+                Log::error('LLM response missing during orchestration', ['response' => $next ?? null]);
                 throw new \RuntimeException('LLM response missing in loop');
             }
         }

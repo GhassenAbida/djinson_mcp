@@ -70,6 +70,7 @@ return [
         'client'       => (int) env('OPENAI_MCP_CLIENT_RETRIES', 3),
         'orchestrator' => (int) env('OPENAI_MCP_ORCHESTRATOR_RETRIES', 2),
         'sleep_ms'     => (int) env('OPENAI_MCP_RETRY_SLEEP_MS', 100),
+        'max_steps'    => (int) env('OPENAI_MCP_MAX_STEPS', 10),
     ],
 
     'timeouts' => [
@@ -92,4 +93,14 @@ return [
     */
 
     'mcp_sse_url'    => env('MCP_SSE_URL', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tool Discovery
+    |--------------------------------------------------------------------------
+    */
+    'tools' => [
+        'path'      => env('MCP_TOOLS_PATH', app_path('MCP/Tools')),
+        'namespace' => env('MCP_TOOLS_NAMESPACE', 'App\\MCP\\Tools\\'),
+    ],
 ];

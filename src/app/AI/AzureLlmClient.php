@@ -19,7 +19,17 @@ class AzureLlmClient implements LlmClientInterface
         $sleep = config('openai-mcp.retries.sleep_ms', 100);
         $timeout = config('openai-mcp.timeouts.request', 30);
 
-        $url = $cfg['endpoint'] . '/openai/deployments/' . $cfg['deployment'] . '/chat/completions?api-version=' . $cfg['api_version'];
+        // Robust URL construction
+        $endpoint = rtrim($cfg['endpoint'], '/');
+        $deployment = $cfg['deployment'];
+        $apiVersion = $cfg['api_version'];
+        
+        $url = sprintf(
+            '%s/openai/deployments/%s/chat/completions?api-version=%s',
+            $endpoint,
+            $deployment,
+            $apiVersion
+        );
 
         // Always include the core messages
         $payload = [
@@ -53,7 +63,14 @@ class AzureLlmClient implements LlmClientInterface
                 ->post($url, $body)
                 ->throw();
 
-                return $response->json();
+                $json = $response->json();
+
+                // Validate response structure
+                if (!isset($json['choices']) || !is_array($json['choices'])) {
+                    throw new \RuntimeException('Invalid LLM response: missing choices key. Response: ' . json_encode($json));
+                }
+
+                return $json;
             }, $sleep);
         } catch (\Exception $e) {
             Log::error('LLM call failed', ['exception' => $e, 'body' => $body]);

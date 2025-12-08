@@ -52,12 +52,19 @@ class LaravelMcpServiceProvider extends PackageServiceProvider
         ], 'openai-mcp-prompts');
 
         $this->discoverAndTagTools();
+
+        // Register tagged tools into the manager
+        $this->app->afterResolving(ToolManagerInterface::class, function (ToolManagerInterface $manager, $app) {
+            foreach ($app->tagged('mcp_tool') as $tool) {
+                $manager->register($tool->name(), $tool);
+            }
+        });
     }
 
     private function discoverAndTagTools(): void
     {
-        $path      = app_path('MCP/Tools');
-        $namespace = app()->getNamespace().'MCP\\Tools\\';
+        $path      = config('openai-mcp.tools.path', app_path('MCP/Tools'));
+        $namespace = config('openai-mcp.tools.namespace', app()->getNamespace().'MCP\\Tools\\');
 
         if (! File::isDirectory($path)) {
             return;
