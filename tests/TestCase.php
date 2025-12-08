@@ -7,6 +7,13 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+    /**
+     * The latest response from the command.
+     *
+     * @var \Illuminate\Testing\TestResponse|null
+     */
+    public static $latestResponse = null;
+
     protected function getPackageProviders($app)
     {
         return [
