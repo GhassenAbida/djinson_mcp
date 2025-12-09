@@ -5,7 +5,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/djinson/laravel-mcp.svg?style=flat-square)](https://packagist.org/packages/djinson/laravel-mcp)
 [![Total Downloads](https://img.shields.io/packagist/dt/djinson/laravel-mcp.svg?style=flat-square)](https://packagist.org/packages/djinson/laravel-mcp)
 [![License](https://img.shields.io/packagist/l/djinson/laravel-mcp.svg?style=flat-square)](https://packagist.org/packages/djinson/laravel-mcp)
-[![Tests](https://img.shields.io/github/actions/workflow/status/djinson/laravel-mcp/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/djinson/laravel-mcp/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/GhassenAbida/djinson_mcp/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/GhassenAbida/djinson_mcp/actions)
 
 ![Laravel MCP Demo](C:/Users/USER/.gemini/antigravity/brain/f7070ea4-857f-4769-a702-afcbaf6c162a/mcp_demo_mockup_1765214956316.png)
 
